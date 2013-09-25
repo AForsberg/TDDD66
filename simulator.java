@@ -63,7 +63,8 @@ public class simulator {
 	
 	//Method that determines if the streaming is going to pause or play by looking at the buffersize.
 	//If the buffer is less than 4 the streaming will pause and the next arriving packet will fill the buffer.
-	//However, if the 
+	//If the buffer is bigger than 4 but less than 6 the streaming will play and download another packet.
+	//However, if the buffer is bigger than 6 the streaming will play but it will NOT download/request another packet.
 	private void bufferOperation(videoPlayer player){
 		
 		boolean waitForMinBuf = false;
