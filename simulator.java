@@ -29,6 +29,7 @@ public class simulator {
 	private void PrintResults(int [] a) {
 		System.out.println(Arrays.toString(a));
 	}
+	
 
 	private int CalculateBandwidth(int bytes, int time) {
 		int bandwidth = 0;
@@ -39,6 +40,8 @@ public class simulator {
 
 	}
 
+	//Method that sets the quality of the streaming. 
+	//It makes it only possible to change the streaming one step up and one or two steps down.
 	private void setQuality(videoPlayer player) {
 		int previousQuality = -1;
 		for (int i = 0; i < bandwidthHistory.length; i++) {
@@ -54,6 +57,9 @@ public class simulator {
 		}
 	}
 	
+	//Method that determines if the streaming is going to pause or play by looking at the buffersize.
+	//If the buffer is less than 4 the streaming will pause and the next arriving packet will fill the buffer.
+	//However, if the 
 	private void bufferOperation(videoPlayer player){
 		
 		boolean waitForMinBuf = false;
