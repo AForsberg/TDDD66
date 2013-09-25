@@ -1,8 +1,10 @@
 package Lab1;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -10,6 +12,7 @@ public class simulator {
 
 	private int[] bandwidthHistory = new int[565];
 	private int[] requestedQuality = new int[565];
+	
 
 	//Method that reads the file and splits up the Strings.
 	//The last two columns will be used in another method to determine the download speed.
@@ -65,14 +68,16 @@ public class simulator {
 	//If the buffer is less than 4 the streaming will pause and the next arriving packet will fill the buffer.
 	//If the buffer is bigger than 4 but less than 6 the streaming will play and download another packet.
 	//However, if the buffer is bigger than 6 the streaming will play but it will NOT download/request another packet.
+	
 	private void bufferOperation(videoPlayer player){
 		
 		boolean waitForMinBuf = false;
 		
 		for (int i = 0; i < requestedQuality.length; i++) {
+			player.bufferHistory[i] = player.currentBufSize;
 			int currentSize = player.getCurrentBufSize();
 			System.out.println("Current buffer size = " +player.currentBufSize);
-			if(currentSize < 4){
+			if(currentSize <= 4){
 				player.setCurrentBufSize(currentSize +4);
 				player.setOperation("Pause");
 				System.out.println(" Player operation = " + player.getOperation() +" Requested quality = " +requestedQuality[i]);
@@ -92,6 +97,31 @@ public class simulator {
 			
 		}
 	}
+	private void writeResults(videoPlayer player, simulator sim){
+		try {
+			//buffersize
+			BufferedWriter writer = new BufferedWriter(new FileWriter("/home/hughe531/TDDD66/input1.txt"));
+			//current quality
+			BufferedWriter writer2 = new BufferedWriter(new FileWriter("/home/hughe531/TDDD66/input2.txt"));
+			//requested quality
+			BufferedWriter writer3 = new BufferedWriter(new FileWriter("/home/hughe531/TDDD66/input3.txt"));
+			 for (int i = 0; i < player.bufferHistory.length; i++) {
+	                writer.write(i + " " + player.bufferHistory[i] + "\n");
+	                if (i == 0) {
+	                	  writer2.write(i + " " + 0 + "\n");
+					}else
+	                writer2.write(i + " " +  sim.requestedQuality[i-1] +  "\n");
+	                writer3.write(i + " " +sim.requestedQuality[i] + "\n");
+			 }
+			 writer.close();
+			 writer2.close();
+			 writer3.close();
+			 
+			 
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
 
 	public static void main(String[] args) throws IOException {
 		simulator sim = new simulator();
@@ -100,7 +130,8 @@ public class simulator {
 		sim.setQuality(player);
 		sim.PrintResults(sim.requestedQuality);
 		sim.bufferOperation(player);
-
+		sim.PrintResults(player.bufferHistory);
+		sim.writeResults(player, sim);
 	}
 
 }
