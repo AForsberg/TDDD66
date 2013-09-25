@@ -3,6 +3,16 @@ package Lab1;
 public class videoPlayer {
 	
 	int currentBufSize;
+	int[] bufferHistory = new int[565];
+	
+	public int getBufferHistory(int i) {
+		return bufferHistory[i];
+	}
+
+	public void setBufferHistory(int i, int buf) {
+		this.bufferHistory[i] = buf;
+	}
+
 	String operation = "Pause";
 	
 	public String getOperation() {
