@@ -11,6 +11,8 @@ public class simulator {
 	private int[] bandwidthHistory = new int[565];
 	private int[] requestedQuality = new int[565];
 
+	//Method that reads the file and splits up the Strings.
+	//The last two columns will be used in another method to determine the download speed.
 	private void ReadFile() throws IOException {
 
 		BufferedReader reader = new BufferedReader(new FileReader(
@@ -31,6 +33,8 @@ public class simulator {
 	}
 	
 
+	//Method that determines the download speed by looking at the 
+	//size and the time it took the packet to be recieved.
 	private int CalculateBandwidth(int bytes, int time) {
 		int bandwidth = 0;
 
