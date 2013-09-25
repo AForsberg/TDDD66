@@ -26,6 +26,8 @@ public class videoPlayer {
 	
 	int playbackQuality = 0;
 	
+	//Method that sets the quality of the next packet that will be streamed
+	//by checking the download speed of the previous packet.
 	int checkQuality(int bandwidth){
 		int currentBandwidth = 0;
 		if (bandwidth >= 250 && bandwidth < 500) {
