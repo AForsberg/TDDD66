@@ -43,11 +43,12 @@ public class videoPlayer {
 		if (bandwidth >= 250 && bandwidth < 500) {
 			currentBandwidth = 0;
 		}else if (bandwidth >= 500 && bandwidth < 850) {
-			currentBandwidth = 1;			
+			currentBandwidth = 1;
 		}else if (bandwidth >= 850 && bandwidth < 1300) {
 			currentBandwidth = 2;
 		}else if (bandwidth >= 1300) {
 			currentBandwidth = 3;
+
 		}
 		return currentBandwidth;
 	}
