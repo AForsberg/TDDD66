@@ -71,18 +71,47 @@ public class simulator {
 	
 	private void bufferOperation(videoPlayer player){
 		
+		boolean currentlyDownloading = false;
 		boolean waitForMinBuf = false;
+		int currentBandwidth = 0;
+		int currentFragmentSize = 0;
+		int fragmentDownloaded = 0;
+		fragment newfragment = null;
 		
 		for (int i = 0; i < requestedQuality.length; i++) {
+			currentBandwidth = bandwidthHistory[i];
+			
 			player.bufferHistory[i] = player.currentBufSize;
 			int currentSize = player.getCurrentBufSize();
 			System.out.println("Current buffer size = " +player.currentBufSize);
-			if(currentSize <= 4){
+			
+			if(currentSize > 6)
+				waitForMinBuf = true;
+			
+			
+			
+			if(currentlyDownloading == false && waitForMinBuf == false){
+				newfragment = new fragment(requestedQuality[i],4);				
+				currentlyDownloading = true;
+				}
+			if(newfragment.getCurrentlyDownloaded() >= newfragment.getFragmentSize()){
 				player.setCurrentBufSize(currentSize +4);
+				currentlyDownloading = false;
+			}
+			if(currentlyDownloading){
+				newfragment.setCurrentlyDownloaded(currentBandwidth/newfragment.getQuality());
+			}
+			
+			/*if(currentSize <= 4 && currentlyDownloading == false){
+					
+				currentFragmentSize = player.currentBitrate[i] * 4;
+				fragmentDownloaded = fragmentDownloaded + currentBandwidth;
+				currentlyDownloading = true;
+				
 				player.setOperation("Pause");
 				System.out.println(" Player operation = " + player.getOperation() +" Requested quality = " +requestedQuality[i]);
-			}else if (currentSize <= 6 && waitForMinBuf == false){
-				player.setCurrentBufSize(currentSize +4);
+			}else if (currentSize <= 6 && waitForMinBuf == false && currentlyDownloading == false){
+				
 				player.setOperation("Play");
 				System.out.println(" Player operation = " + player.getOperation() +" Requested quality = " +requestedQuality[i]);
 				player.setCurrentBufSize(player.currentBufSize - 1);
@@ -90,10 +119,11 @@ public class simulator {
 				player.setOperation("Play");
 				System.out.println(" Player operation = " + player.getOperation() +" Requested quality = " +requestedQuality[i]);
 				waitForMinBuf = true;
-				player.setCurrentBufSize(player.currentBufSize - 1);
-			}
+			}*/
 			
 			
+			player.setCurrentBufSize(player.currentBufSize - 1);
+
 			
 		}
 	}
